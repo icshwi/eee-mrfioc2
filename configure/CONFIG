@@ -7,9 +7,10 @@ EPICS_MODULE_NAME=mrfioc2
 # install in ESS EPICS Environment (ESS)
 EPICS_MODULE_TAG=2.2.0-pre1
 
-# EPICS_MODULE_PATH : USUALLY a directory, which we are cloning in
-# the current working directory. However, it should be matched with SRC_TOP
-# in ESS_MODULE_MAKEFILE
+# EPICS_MODULE_PATH : USUALLY a directory (relative path), 
+# which we are cloning in the current working directory. 
+# However, it should be matched with SRC_TOP in ESS_MODULE_MAKEFILE. 
+
 EPICS_MODULE_PATH=$(EPICS_MODULE_NAME)
 
 # EPICS_MODULE_VERSION : EEE LIBVERSION, which we can use the module version

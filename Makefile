@@ -19,6 +19,8 @@
 # Date    : Monday, September 18 15:40:33 CEST 2017
 # version : 0.0.1
 
+
+
 TOP = $(CURDIR)
 
 include $(TOP)/configure/CONFIG
@@ -57,7 +59,7 @@ install:
 
 
 ## Build     EPICS Module in order to use it with EEE
-build:
+build: 
 	make -f $(ESS_MODULE_MAKEFILE) LIBVERSION=$(ESS_MODULE_VERSION) SRC_TOP=$(EPICS_MODULE_PATH) PROJECT=$(ESS_MODULE_PROJECT_NAME)
 
 
@@ -89,6 +91,7 @@ env:
 	@echo "ESS_MODULE_VERSION     : "$(ESS_MODULE_VERSION)
 	@echo "ESS_MODULE_MAKEFILE    : "$(ESS_MODULE_MAKEFILE)
 	@echo "ESS_MODULE_PROJECTNAME : "$(ESS_MODULE_PROJECT_NAME)
+	@echo "EPICS_MODULE_PATH      : "$(EPICS_MODULE_PATH)
 	@echo ""
 	@echo "EPICS_BASES_PATH       : "$(EPICS_BASES_PATH)
 	@echo "EPICS_MODULES_PATH     : "$(EPICS_MODULES_PATH)
