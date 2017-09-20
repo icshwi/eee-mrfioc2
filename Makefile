@@ -16,17 +16,14 @@
 #
 # Author  : Jeong Han Lee
 # email   : han.lee@esss.se
-# Date    : Monday, September 18 15:40:33 CEST 2017
-# version : 0.0.1
-
-
+# Date    : Wednesday, September 20 18:00:59 CEST 2017
+# version : 0.0.2
 
 TOP = $(CURDIR)
 
 include $(TOP)/configure/CONFIG
 
 M_DIRS:=$(sort $(dir $(wildcard $(TOP)/*/.)))
-
 
 # help is defined in 
 # https://gist.github.com/rcmachado/af3db315e31383502660
@@ -48,8 +45,6 @@ help:
 
 default: help
 
-
-
 #
 # We have to keep ${EPICS_ENV_PATH} within SUDO
 # 
@@ -58,9 +53,10 @@ install:
 	sudo -E bash -c 'make -f $(ESS_MODULE_MAKEFILE) LIBVERSION=$(ESS_MODULE_VERSION) SRC_TOP=$(EPICS_MODULE_PATH) PROJECT=$(ESS_MODULE_PROJECT_NAME)  install'
 
 
+
 ## Build     EPICS Module in order to use it with EEE
 build: 
-	make -f $(ESS_MODULE_MAKEFILE) LIBVERSION=$(ESS_MODULE_VERSION) SRC_TOP=$(EPICS_MODULE_PATH) PROJECT=$(ESS_MODULE_PROJECT_NAME)
+	make -f $(ESS_MODULE_MAKEFILE) LIBVERSION=$(ESS_MODULE_VERSION) SRC_TOP=$(EPICS_MODULE_PATH) PROJECT=$(ESS_MODULE_PROJECT_NAME) build
 
 
 ## Clean     EPICS Module in terms of EEE Makefile (module.Makefile)
@@ -72,9 +68,6 @@ clean:
 distclean:
 	make -f $(ESS_MODULE_MAKEFILE) LIBVERSION=$(ESS_MODULE_VERSION) SRC_TOP=$(EPICS_MODULE_PATH) PROJECT=$(ESS_MODULE_PROJECT_NAME) distclean
 
-
-debug:
-	make -f $(ESS_MODULE_MAKEFILE) LIBVERSION=$(ESS_MODULE_VERSION) SRC_TOP=$(EPICS_MODULE_PATH) PROJECT=$(ESS_MODULE_PROJECT_NAME)debug 
 
 ## Get      EPICS Module, and change its $(EPICS_MODULE_TAG)
 init:

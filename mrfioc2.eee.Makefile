@@ -1,43 +1,44 @@
+# This makefile is only valid for COMMUNITY Tag 2.2.0 with > EPICS BASE 3.15.4
+#
 # LIBVERSION is overwritten by the python script in module.Makefile, so it didn't work
 # LIBVERSION=2.9.0
 
-STARTUPS=-none-
+
+EXCLUDE_ARCHS += eldk
+#STARTUPS=-none-
 EXCLUDE_VERSIONS=3.14
+
+# If the EEE has devlib2 with 2.7.0 and devlib2-new with 2.9.0
+# the building system can add both includes in the compiling option
+# It may be the sole reason why we have so many troubles related with
+# module version mismatch within the current EEE
+# 
 USR_DEPENDENCIES += devlib2,2.9.0
 
 
-# # SRC_TOP : Local Variable to represent where all source files are located.
-# #           Input variable of the main Makefile
+# SRC_TOP : Local Variable to represent where all source files are located
+#           Input variable of the main Makefile
 
-# # All source codes are defined here, are defined in Makefile in each main Applcations with 
-# # Library IOC only. I don't add PRODUCT in this makefile. Still I have no idea how I implement
-# # the PRODUCT binary within EEE
-# # Tuesday, September 19 14:30:38 CEST 2017, jhlee
+# All source codes are defined here, are defined in Makefile in each main Applcations with 
+# Library IOC only. I don't add PRODUCT in this makefile. Still I have no idea how I implement
+# the PRODUCT binary within EEE
+# Tuesday, September 19 14:30:38 CEST 2017, jhlee
+
 
 
 export PERL5LIB=$(EPICS_BASE)/lib/perl
+MRF_VERSION = 2.2.0-pre1
 
-MRF_VERSION = 2.2.0
 
+MRFCOMMOM:= $(SRC_TOP)/mrfCommon/src
 
-MRFCOMMOM = $(SRC_TOP)/mrfCommon/src
-
-## USR_INCLUDES doesn't work also
-USR_INCLUDES += -I$(MRFCOMMOM)
-USR_INCLUDES += -I$(MRFCOMMOM)/mrf
-
-## Introduce mrf, in order to compile some source files which
-## should know databuf.h, object.h, and version.h
-## it turns out, include/mrf is created, and copy all headers files
-## in that directory. However, module.Makefile include 
-## include and include/mrf as default.
-##
-## HEADERS_PREFIX=mrf
+## USR_INCLUDES can be used, however, we have to define the absolute path first
+## 
 
 HEADERS += $(MRFCOMMOM)/mrfBitOps.h
-HEADERS += $(MRFCOMMOM)/mrfCommon.h        # Common MRF event system constants & definitions
-HEADERS += $(MRFCOMMOM)/mrfCommonIO.h      # Common I/O access macros
-HEADERS += $(MRFCOMMOM)/mrfFracSynth.h     # Fractional Synthesizer routines
+HEADERS += $(MRFCOMMOM)/mrfCommon.h  
+HEADERS += $(MRFCOMMOM)/mrfCommonIO.h 
+HEADERS += $(MRFCOMMOM)/mrfFracSynth.h
 HEADERS += $(MRFCOMMOM)/linkoptions.h
 HEADERS += $(MRFCOMMOM)/mrfcsr.h
 HEADERS += $(MRFCOMMOM)/mrf/databuf.h
@@ -73,11 +74,9 @@ SOURCES += $(MRFCOMMOM)/flashiocsh.cpp
 DBDS    += $(MRFCOMMOM)/mrfCommon.dbd
 
 
-
-
+# COMMUNITY Dependency
 # mrfCommon
-MRMSHARED = $(SRC_TOP)/mrmShared/src
-USR_INCLUDES += -I$(MRMSHARED)
+MRMSHARED:= $(SRC_TOP)/mrmShared/src
 
 HEADERS += $(MRMSHARED)/mrmDataBufTx.h
 HEADERS += $(MRMSHARED)/mrmSeq.h
@@ -92,10 +91,9 @@ SOURCES += $(MRMSHARED)/mrmtimesrc.cpp
 
 DBDS    += $(MRMSHARED)/mrmShared.dbd
 
-
+# COMMUNITY Dependency
 # mrfCommon
-EVRAPP    = $(SRC_TOP)/evrApp/src
-USR_INCLUDES += -I$(EVRAPP)
+EVRAPP:= $(SRC_TOP)/evrApp/src
 
 HEADERS += $(EVRAPP)/evr/pulser.h
 HEADERS += $(EVRAPP)/evr/output.h
@@ -121,10 +119,9 @@ SOURCES_DEFAULT += $(EVRAPP)/ntpShmNull.cpp
 DBDS    += $(EVRAPP)/evrSupport.dbd
 
 
+# COMMUNITY Dependency 
 # mrfCommon (mrfioc2), mrmShared (mrfioc2), epicsvme (devlib2), epicspci (devlib2)
-EVGMRMAPP = $(SRC_TOP)/evgMrmApp/src
-
-USR_INCLUDES += -I$(EVGMRMAPP)
+EVGMRMAPP:= $(SRC_TOP)/evgMrmApp/src
 
 HEADERS += $(EVGMRMAPP)/evgMrm.h
 HEADERS += $(EVGMRMAPP)/evgRegMap.h
@@ -156,9 +153,9 @@ SOURCES += $(EVGMRMAPP)/seqnsls2.c
 DBDS    += $(EVGMRMAPP)/evgInit.dbd
 
 
+# COMMUNITY Dependency
 # mrfCommon (mrfioc2), mrmShared (mrfioc2), evr (mrfioc2), epicsvme (devlib2), epicspci (devlib2)
-EVRMRMAPP = $(SRC_TOP)/evrMrmApp/src
-USR_INCLUDES += -I$(EVRMRMAPP)
+EVRMRMAPP:= $(SRC_TOP)/evrMrmApp/src
 
 
 # HEADERS += $(EVRMRMAPP)/drvemIocsh.h
@@ -194,9 +191,11 @@ SOURCES_DEFAULT += $(EVRMRMAPP)/os/default/irqHack.cpp
 
 DBDS    += $(EVRMRMAPP)/drvemSupport.dbd
 
-#include ${HOME}/ics_gitsrc/m-epics-environment/scripts/test.Makefile
 
-include ${EPICS_ENV_PATH}/module.Makefile
+WHEREAMI:=$(dir $(lastword $(MAKEFILE_LIST)))
+include ${WHEREAMI}/../m-epics-environment/scripts/module.Makefile
+#include ${EPICS_ENV_PATH}/module.Makefile
+
 
 
 ## 
@@ -209,4 +208,6 @@ version.h::
 	$(PERL) ../../$(MRFCOMMOM)/genVersionHeader.pl -V "$(MRF_VERSION)" -N MRF_VERSION $@
 	install -m 644 -t ${BUILD_PATH}/${EPICSVERSION}/include/mrf/ $@
 	install -m 644 -t ${BUILD_PATH}/${EPICSVERSION}/include/evr/ ${BUILD_PATH}/${EPICSVERSION}/include/output.h
+
+
 
