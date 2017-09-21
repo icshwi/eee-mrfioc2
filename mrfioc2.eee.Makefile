@@ -3,13 +3,14 @@
 # LIBVERSION is overwritten by the python script in module.Makefile, so it didn't work
 # LIBVERSION=2.9.0
 
-
 EXCLUDE_ARCHS += eldk
 #STARTUPS=-none-
 EXCLUDE_VERSIONS=3.14
 
 # If the EEE has devlib2 with 2.7.0 and devlib2-new with 2.9.0
 # the building system can add both includes in the compiling option
+# even if we set here devlib2 instead of devlib2-new. 
+# 
 # It may be the sole reason why we have so many troubles related with
 # module version mismatch within the current EEE
 # 
@@ -25,14 +26,14 @@ USR_DEPENDENCIES += devlib2,2.9.0
 # Tuesday, September 19 14:30:38 CEST 2017, jhlee
 
 
-
 export PERL5LIB=$(EPICS_BASE)/lib/perl
-MRF_VERSION = 2.2.0-pre1
+
+MRF_VERSION = $(EPICS_MODULE_TAG)
 
 
 MRFCOMMOM:= $(SRC_TOP)/mrfCommon/src
 
-## USR_INCLUDES can be used, however, we have to define the absolute path first
+## USR_INCLUDES can be used, however, have to define the absolute path
 ## 
 
 HEADERS += $(MRFCOMMOM)/mrfBitOps.h
@@ -192,8 +193,8 @@ SOURCES_DEFAULT += $(EVRMRMAPP)/os/default/irqHack.cpp
 DBDS    += $(EVRMRMAPP)/drvemSupport.dbd
 
 
-WHEREAMI:=$(dir $(lastword $(MAKEFILE_LIST)))
-include ${WHEREAMI}/../m-epics-environment/scripts/module.Makefile
+where_am_I := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+include ${where_am_I}/../m-epics-environment/scripts/module.Makefile
 #include ${EPICS_ENV_PATH}/module.Makefile
 
 
@@ -202,6 +203,12 @@ include ${WHEREAMI}/../m-epics-environment/scripts/module.Makefile
 ## There is no way to handle if source file calls /mrf/version.h or evr/output.h in module.Makefile
 ## This is the dirty solution to work around after many trials and fails
 ##
+## Somehow, this activity is triggered in many times in module.Makefile. It wastes some resources,
+## but don't care about them right now. 
+## 
+## 
+## MRF_VERSION is the input arg in Makefile
+## 
 version.h::
 	mkdir -p ${BUILD_PATH}/${EPICSVERSION}/include/mrf/
 	mkdir -p ${BUILD_PATH}/${EPICSVERSION}/include/evr/
