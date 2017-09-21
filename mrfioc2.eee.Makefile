@@ -203,7 +203,7 @@ include ${where_am_I}/../m-epics-environment/scripts/module.Makefile
 ## There is no way to handle if source file calls /mrf/version.h or evr/output.h in module.Makefile
 ## This is the dirty solution to work around after many trials and fails
 ##
-## Somehow, this activity is triggered in many times in module.Makefile. It wastes some resources,
+## Somehow, this activity is triggered in many times by module.Makefile. It wastes some resources,
 ## but don't care about them right now. 
 ## 
 ## 
