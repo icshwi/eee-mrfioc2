@@ -1,37 +1,20 @@
 # This makefile is only valid for COMMUNITY Tag 2.2.0 with > EPICS BASE 3.15.4
 #
-# LIBVERSION is overwritten by the python script in module.Makefile, so it didn't work
-# LIBVERSION=2.9.0
+# (LOCAL) EPICS_MODULE_TAG      in configure/CONFIG
+# (LOCAL) EPICS_MODULE_SRC_PATH in configure/CONFIG
+
 
 EXCLUDE_ARCHS += eldk
 #STARTUPS=-none-
 EXCLUDE_VERSIONS=3.14
 
-# If the EEE has devlib2 with 2.7.0 and devlib2-new with 2.9.0
-# the building system can add both includes in the compiling option
-# even if we set here devlib2 instead of devlib2-new. 
-# 
-# It may be the sole reason why we have so many troubles related with
-# module version mismatch within the current EEE
-# 
-USR_DEPENDENCIES += devlib2,2.9.0
-
-
-# SRC_TOP : Local Variable to represent where all source files are located
-#           Input variable of the main Makefile
-
-# All source codes are defined here, are defined in Makefile in each main Applcations with 
-# Library IOC only. I don't add PRODUCT in this makefile. Still I have no idea how I implement
-# the PRODUCT binary within EEE
-# Tuesday, September 19 14:30:38 CEST 2017, jhlee
 
 
 export PERL5LIB=$(EPICS_BASE)/lib/perl
 
 MRF_VERSION = $(EPICS_MODULE_TAG)
 
-
-MRFCOMMOM:= $(SRC_TOP)/mrfCommon/src
+MRFCOMMOM:= $(EPICS_MODULE_SRC_PATH)/mrfCommon/src
 
 ## USR_INCLUDES can be used, however, have to define the absolute path
 ## 
@@ -77,7 +60,7 @@ DBDS    += $(MRFCOMMOM)/mrfCommon.dbd
 
 # COMMUNITY Dependency
 # mrfCommon
-MRMSHARED:= $(SRC_TOP)/mrmShared/src
+MRMSHARED:= $(EPICS_MODULE_SRC_PATH)/mrmShared/src
 
 HEADERS += $(MRMSHARED)/mrmDataBufTx.h
 HEADERS += $(MRMSHARED)/mrmSeq.h
@@ -94,7 +77,7 @@ DBDS    += $(MRMSHARED)/mrmShared.dbd
 
 # COMMUNITY Dependency
 # mrfCommon
-EVRAPP:= $(SRC_TOP)/evrApp/src
+EVRAPP:= $(EPICS_MODULE_SRC_PATH)/evrApp/src
 
 HEADERS += $(EVRAPP)/evr/pulser.h
 HEADERS += $(EVRAPP)/evr/output.h
@@ -122,7 +105,7 @@ DBDS    += $(EVRAPP)/evrSupport.dbd
 
 # COMMUNITY Dependency 
 # mrfCommon (mrfioc2), mrmShared (mrfioc2), epicsvme (devlib2), epicspci (devlib2)
-EVGMRMAPP:= $(SRC_TOP)/evgMrmApp/src
+EVGMRMAPP:= $(EPICS_MODULE_SRC_PATH)/evgMrmApp/src
 
 HEADERS += $(EVGMRMAPP)/evgMrm.h
 HEADERS += $(EVGMRMAPP)/evgRegMap.h
@@ -156,7 +139,7 @@ DBDS    += $(EVGMRMAPP)/evgInit.dbd
 
 # COMMUNITY Dependency
 # mrfCommon (mrfioc2), mrmShared (mrfioc2), evr (mrfioc2), epicsvme (devlib2), epicspci (devlib2)
-EVRMRMAPP:= $(SRC_TOP)/evrMrmApp/src
+EVRMRMAPP:= $(EPICS_MODULE_SRC_PATH)/evrMrmApp/src
 
 
 # HEADERS += $(EVRMRMAPP)/drvemIocsh.h

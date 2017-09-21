@@ -16,11 +16,10 @@
 #
 # Author  : Jeong Han Lee
 # email   : han.lee@esss.se
-# Date    : Thursday, September 21 10:25:06 CEST 2017
-# version : 0.0.3
+# Date    : Thursday, September 21 14:05:28 CEST 2017
+# version : 0.0.4
 #
-# This makefile is valid for only mrfioc2,  because of MRF_VERSION.
-# 
+
 
 TOP = $(CURDIR)
 
@@ -54,23 +53,22 @@ default: help
 # 
 ## Install   EPICS Module in order to use it with EEE
 install:
-	sudo -E bash -c 'make -f $(ESS_MODULE_MAKEFILE) LIBVERSION=$(ESS_MODULE_VERSION) SRC_TOP=$(EPICS_MODULE_PATH) PROJECT=$(ESS_MODULE_PROJECT_NAME) MRF_VERSION=$(EPICS_MODULE_TAG)  install'
+	sudo -E bash -c 'make -f $(ESS_MODULE_MAKEFILE) install'
 
 
 
 ## Build     EPICS Module in order to use it with EEE
 build: 
-	make -f $(ESS_MODULE_MAKEFILE) LIBVERSION=$(ESS_MODULE_VERSION) SRC_TOP=$(EPICS_MODULE_PATH) PROJECT=$(ESS_MODULE_PROJECT_NAME) MRF_VERSION=$(EPICS_MODULE_TAG)  build
-
+	make -f $(ESS_MODULE_MAKEFILE) build
 
 ## Clean     EPICS Module in terms of EEE Makefile (module.Makefile)
 clean:
-	make -f $(ESS_MODULE_MAKEFILE) LIBVERSION=$(ESS_MODULE_VERSION) SRC_TOP=$(EPICS_MODULE_PATH) PROJECT=$(ESS_MODULE_PROJECT_NAME) MRF_VERSION=$(EPICS_MODULE_TAG) clean
+	make -f $(ESS_MODULE_MAKEFILE) clean
 
 
 ## Distclean EPICS Module in terms of EEE Makefile (module.Makefile)
 distclean:
-	make -f $(ESS_MODULE_MAKEFILE) LIBVERSION=$(ESS_MODULE_VERSION) SRC_TOP=$(EPICS_MODULE_PATH) PROJECT=$(ESS_MODULE_PROJECT_NAME) MRF_VERSION=$(EPICS_MODULE_TAG) distclean
+	make -f $(ESS_MODULE_MAKEFILE) distclean
 
 
 ## Get      EPICS Module, and change its $(EPICS_MODULE_TAG)
